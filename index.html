@@ -57,9 +57,9 @@
     <header class="p-4 bg-slate-950/80 border-b border-cyan-500/30 backdrop-blur-sm z-10">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <span class="text-3xl">👽</span>
-                <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-yellow-300 bg-clip-text text-transparent">
-                    3xM: MULTIPLICACIONES MATEMÁTICAS MARCIANAS
+                <span class="text-3xl">🚀</span>
+                <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-yellow-300 bg-clip-text text-transparent tracking-wide">
+                    3xM: MULTIPLICACIONES MARCIANAS
                 </h1>
             </div>
             <div id="sound-control" class="cursor-pointer text-2xl p-2 bg-slate-800/50 rounded-full hover:bg-slate-700/50 transition">
@@ -75,10 +75,21 @@
         <section id="screen-setup" class="w-full max-w-2xl bg-slate-900/90 border-2 border-cyan-500 rounded-3xl p-6 md:p-8 neon-border-cyan backdrop-blur-md">
             <h2 class="text-2xl md:text-3xl font-bold text-center text-cyan-300 mb-2">¡Prepara tu Defensa Matemática!</h2>
             <p class="text-slate-300 text-center text-sm md:text-base mb-6">
-                Selecciona las tablas de multiplicar que estás estudiando para comenzar la misión. Los marcianos atacarán usando esas combinaciones.
+                Selecciona las tablas que estás estudiando y la duración del juego para iniciar la misión espacial.
             </p>
 
-            <!-- Pre-configuraciones Rápidas -->
+            <!-- Selección de Duración del Juego -->
+            <div class="mb-6 bg-slate-950/40 p-4 rounded-2xl border border-slate-800 text-center">
+                <p class="text-xs font-bold uppercase tracking-wider text-cyan-400 mb-3">Duración de la Partida (Preguntas)</p>
+                <div class="flex justify-center gap-3 md:gap-4" id="duration-selector">
+                    <button onclick="selectDuration(5)" id="duration-btn-5" class="px-5 py-2.5 bg-slate-800 border-2 border-slate-700 rounded-xl text-sm font-bold text-slate-300 transition hover:border-slate-600">5</button>
+                    <button onclick="selectDuration(10)" id="duration-btn-10" class="px-5 py-2.5 bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 rounded-xl text-sm font-bold transition shadow-[0_0_10px_rgba(6,182,212,0.3)]">10</button>
+                    <button onclick="selectDuration(15)" id="duration-btn-15" class="px-5 py-2.5 bg-slate-800 border-2 border-slate-700 rounded-xl text-sm text-slate-400 font-bold transition hover:border-slate-600">15</button>
+                    <button onclick="selectDuration(20)" id="duration-btn-20" class="px-5 py-2.5 bg-slate-800 border-2 border-slate-700 rounded-xl text-sm text-slate-400 font-bold transition hover:border-slate-600">20</button>
+                </div>
+            </div>
+
+            <!-- Pre-configuraciones Rápidas de Tablas -->
             <div class="mb-6">
                 <p class="text-xs font-semibold uppercase tracking-wider text-cyan-400 mb-2 text-center">Niveles recomendados</p>
                 <div class="flex flex-wrap gap-2 justify-center">
@@ -144,18 +155,18 @@
                         <p id="hud-speed" class="text-xl font-bold text-cyan-400">x1.0</p>
                     </div>
                     <div class="text-center border-l border-slate-800 pl-6">
-                        <p class="text-[10px] text-slate-400 uppercase font-bold">Ola / Dificultad</p>
-                        <p id="hud-wave" class="text-xl font-bold text-pink-400">1</p>
+                        <p class="text-[10px] text-slate-400 uppercase font-bold">Ronda</p>
+                        <p id="hud-wave" class="text-xl font-bold text-pink-400">1 / 10</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Arena de combate espacial -->
+            <!-- Arena de combate espacial (COMPLETAMENTE LIMPIA DE MENSAJES FLOTANTES INFERIORES) -->
             <div class="relative w-full h-[380px] md:h-[480px] bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden neon-border-magenta" id="space-arena">
                 <!-- Las estrellas o asteroides decorativos se mueven de fondo -->
                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/90 pointer-events-none"></div>
                 
-                <!-- Bounding Box / Guías del rectángulo pedagógico (Se muestra en modo alineado) -->
+                <!-- Bounding Box / Guías del rectángulo pedagógico -->
                 <div id="grid-visual-helper" class="absolute hidden border-2 border-dashed border-cyan-400/40 bg-cyan-950/20 rounded-xl transition-all duration-700 pointer-events-none">
                     <!-- Etiquetas del rectángulo pedagógico -->
                     <div class="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-cyan-900 border border-cyan-400 px-3 py-0.5 rounded text-[11px] font-bold text-cyan-200 shadow-md">
@@ -192,38 +203,42 @@
                 <div class="absolute top-0 left-0 w-full h-1.5 bg-slate-800">
                     <div id="laser-timer" class="h-full bg-gradient-to-r from-red-500 via-orange-500 to-yellow-400 w-full shadow-[0_0_8px_#ef4444]"></div>
                 </div>
+            </div>
 
-                <!-- Cartel de Respuesta de Explicación Educativa -->
-                <div id="educational-card" class="absolute inset-x-4 bottom-4 bg-slate-900/95 border-2 border-emerald-400 rounded-2xl p-4 hidden flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl animate-bounce">
+            <!-- CONTENEDOR DINÁMICO DE INTERACCIÓN (Sustituye botones por el feedback al contestar) -->
+            <div class="relative min-h-[140px] md:min-h-[160px] w-full">
+                
+                <!-- Panel de opciones / Respuestas (Visible durante el juego activo) -->
+                <div id="options-panel" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
+                        ?
+                    </button>
+                    <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
+                        ?
+                    </button>
+                    <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
+                        ?
+                    </button>
+                    <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
+                        ?
+                    </button>
+                </div>
+
+                <!-- Cartel de Respuesta de Explicación Educativa (Sustituye a los botones al responder) -->
+                <div id="educational-card" class="hidden bg-slate-900/95 border-2 border-emerald-400 rounded-2xl p-4 md:p-5 flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
                     <div class="flex items-center gap-3 text-left">
-                        <span id="edu-emoji" class="text-3xl">🎉</span>
+                        <span id="edu-emoji" class="text-3xl md:text-4xl shrink-0">🎉</span>
                         <div>
-                            <h4 id="edu-title" class="text-emerald-400 font-bold text-sm md:text-base">¡Excelente cálculo defensivo!</h4>
-                            <p id="edu-desc" class="text-slate-300 text-xs md:text-sm max-w-xl">
+                            <h4 id="edu-title" class="text-emerald-400 font-bold text-base md:text-lg">¡Excelente cálculo defensivo!</h4>
+                            <p id="edu-desc" class="text-slate-300 text-xs md:text-sm max-w-2xl leading-relaxed">
                                 Los marcianos se organizaron en 3 columnas de 4 elementos. ¡Es más rápido multiplicar que contar uno a uno!
                             </p>
                         </div>
                     </div>
-                    <button id="btn-next-wave" onclick="advanceToNextWave()" class="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-bold rounded-xl transition text-sm flex items-center gap-2 shrink-0">
+                    <button id="btn-next-wave" onclick="advanceToNextWave()" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-bold rounded-xl transition text-sm flex items-center gap-2 shrink-0">
                         Siguiente Ola 🛸 ➔
                     </button>
                 </div>
-            </div>
-
-            <!-- Panel de opciones / Respuestas (Para móviles y tablets táctiles de manera prioritaria) -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
-                    ?
-                </button>
-                <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
-                    ?
-                </button>
-                <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
-                    ?
-                </button>
-                <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
-                    ?
-                </button>
             </div>
         </section>
 
@@ -240,13 +255,13 @@
                         <p id="summary-score" class="text-3xl font-bold text-cyan-300">0</p>
                     </div>
                     <div class="text-center border-l border-slate-800 pl-8">
-                        <p class="text-xs text-slate-400 uppercase font-bold">Olas Superadas</p>
+                        <p class="text-xs text-slate-400 uppercase font-bold">Preguntas Respondidas</p>
                         <p id="summary-waves" class="text-3xl font-bold text-pink-400">0</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Reporte Detallado de Tablas de Multiplicar Utilizadas -->
+            <!-- Reporte Detallado de Tablas de Multiplicar Utilizadas al Completo (1 al 10) -->
             <div class="bg-slate-950/80 rounded-2xl p-5 border border-slate-800 mb-6 max-h-[350px] overflow-y-auto">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800/60 pb-3 mb-4 gap-2">
                     <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Detalle de Operaciones de esta Partida</h3>
@@ -279,7 +294,7 @@
 
     <!-- PIE DE PÁGINA -->
     <footer class="p-4 bg-slate-950/40 text-center text-xs text-slate-500 z-10 border-t border-slate-950">
-        <p>3xM: Multiplicaciones Matemáticas Marcianas (2026) - Álvaro Sañudo | Eva Sañudo<br>Este proyecto ha sido desarrollado íntegramente con Gemini AI.</p>
+        <p>3xM: Multiplicaciones Matemáticas Marcianas © 2026 - Herramienta pedagógica para 2.º de Primaria.</p>
     </footer>
 
     <!-- LOGICA DEL JUEGO -->
@@ -373,11 +388,12 @@
 
         // ESTADO GLOBAL DEL JUEGO
         let selectedTables = [2, 3, 5, 10]; // Tablas seleccionadas
+        let totalRounds = 10; // Duración predeterminada
         let score = 0;
         let lives = 3;
-        let wave = 1;
+        let wave = 1; // Ronda actual
         let speedMultiplier = 1.0;
-        const baseTimeLimit = 18; // Reducido levemente el límite base porque ahora se suma bonus por dificultad de operación
+        const baseTimeLimit = 18; // Tiempo base adaptativo
         let timer = 0;
         let maxTimer = 18;
         let timerInterval = null;
@@ -394,6 +410,20 @@
             renderTablesSelector();
             goToSetup();
         });
+
+        // SELECCIÓN DE DURACIÓN
+        function selectDuration(num) {
+            AudioSynth.playLaser();
+            totalRounds = num;
+            [5, 10, 15, 20].forEach(d => {
+                const btn = document.getElementById(`duration-btn-${d}`);
+                if (d === num) {
+                    btn.className = "px-5 py-2.5 bg-cyan-500/20 border-2 border-cyan-400 text-cyan-200 rounded-xl text-sm font-bold transition shadow-[0_0_10px_rgba(6,182,212,0.3)]";
+                } else {
+                    btn.className = "px-5 py-2.5 bg-slate-800 border-2 border-slate-700 rounded-xl text-sm text-slate-400 font-bold transition hover:border-slate-600";
+                }
+            });
+        }
 
         // RENDER DE SECTOR DE TABLAS EN LA PANTALLA DE CONFIGURACIÓN
         function renderTablesSelector() {
@@ -509,7 +539,7 @@
         function updateHUD() {
             document.getElementById('hud-score').innerText = String(score).padStart(3, '0');
             document.getElementById('hud-speed').innerText = `x${speedMultiplier.toFixed(1)}`;
-            document.getElementById('hud-wave').innerText = wave;
+            document.getElementById('hud-wave').innerText = `${wave} / ${totalRounds}`;
             
             // Dibujar corazones de vida
             const hearts = document.getElementById('lives-container');
@@ -525,8 +555,11 @@
 
         // GENERAR UNA PREGUNTA Y OLA (CON PROGRESIÓN DE DIFICULTAD Y SIN REPETICIÓN)
         function startNewWave() {
-            // Ocultar explicaciones pedagógicas anteriores
+            // Intercambiar zona de interacción: Mostrar los botones y ocultar la tarjeta pedagógica
+            document.getElementById('options-panel').classList.remove('hidden');
+            document.getElementById('options-panel').classList.add('grid');
             document.getElementById('educational-card').classList.add('hidden');
+            document.getElementById('educational-card').classList.remove('flex');
             document.getElementById('grid-visual-helper').classList.add('hidden');
             
             // Habilitar de nuevo los botones de opciones
@@ -536,19 +569,18 @@
                 btn.className = "option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md";
             });
 
-            // PROGRESION DE DIFICULTAD: Limita el factor B en función de la ola actual
+            // ANDAMIAJE COGNITIVO / CURVA DE DIFICULTAD DINÁMICA:
+            const progressRatio = wave / totalRounds;
             let maxFactorB = 10;
-            if (wave === 1) {
-                maxFactorB = 3;  // Operaciones súper sencillas para empezar (A x 1, A x 2, A x 3)
-            } else if (wave === 2) {
-                maxFactorB = 5;  // Subida gradual (A x 1 hasta A x 5)
-            } else if (wave === 3) {
-                maxFactorB = 7;  // Progresión (A x 1 hasta A x 7)
-            } else if (wave === 4) {
-                maxFactorB = 9;  // Desafío avanzado (A x 1 hasta A x 9)
-            } // Ola 5 en adelante desbloquea el factor B completo del 1 al 10.
+            if (progressRatio <= 0.25) {
+                maxFactorB = 3; // Primer cuarto del juego: multiplicaciones muy sencillas (A x 1..3)
+            } else if (progressRatio <= 0.5) {
+                maxFactorB = 5; // Segundo cuarto: dificultad progresiva (A x 1..5)
+            } else if (progressRatio <= 0.75) {
+                maxFactorB = 8; // Tercer cuarto: nivel medio-alto (A x 1..8)
+            }
 
-            // Crear lista de todas las combinaciones posibles en base a las tablas seleccionadas y el límite actual de B
+            // Crear lista de todas las combinaciones posibles en base a las tablas seleccionadas y el límite progresivo de B
             let eligiblePairs = [];
             selectedTables.forEach(tableA => {
                 for (let factorB = 1; factorB <= maxFactorB; factorB++) {
@@ -563,10 +595,8 @@
 
             let selectedPair;
             if (unaskedPairs.length > 0) {
-                // Quedan multiplicaciones sin repetir para esta dificultad
                 selectedPair = unaskedPairs[Math.floor(Math.random() * unaskedPairs.length)];
             } else {
-                // Se han agotado todas las combinaciones posibles para esta dificultad: empezamos a repetir libremente de las elegibles
                 selectedPair = eligiblePairs[Math.floor(Math.random() * eligiblePairs.length)];
             }
 
@@ -579,7 +609,7 @@
             // Dibujar pregunta
             document.getElementById('question-text').innerText = `${a} × ${b}`;
 
-            // Generar opciones (1 correcta, 3 distractores inteligentes de multiplicación)
+            // Generar opciones
             const options = generateDistractors(a, b, answer);
             shuffleArray(options);
 
@@ -592,9 +622,8 @@
             createUfos(answer);
 
             // CALCULAR TIEMPO MÁXIMO CON BONUS ADAPTATIVO POR DIFICULTAD DE LA OPERACIÓN
-            // A mayor resultado, más tiempo disponible (más lenta baja la barra) para no agobiar al niño
-            const baseWaveLimit = Math.max(6, baseTimeLimit - (wave - 1) * 1.2); // Tiempo base por ola
-            const difficultyBonus = (a * b) * 0.15; // Añade hasta 15 segundos para las operaciones de mayor resultado (ej: 10x10=100 -> +15s)
+            const baseWaveLimit = Math.max(6, baseTimeLimit - (wave - 1) * 1.2); 
+            const difficultyBonus = (a * b) * 0.15; // Añade hasta 15 segundos para operaciones complejas
             
             maxTimer = baseWaveLimit + difficultyBonus;
             timer = maxTimer;
@@ -620,16 +649,13 @@
             const list = new Set();
             list.add(answer);
 
-            // Distractor 1: Suma en vez de multiplicar (típico error en 2.º de primaria)
             if (a + b !== answer && a + b > 0) list.add(a + b);
             
-            // Distractor 2: Error cercano de cálculo por un factor arriba o abajo
             const optionOffset1 = a * Math.max(1, b - 1);
             if (optionOffset1 !== answer && optionOffset1 > 0) list.add(optionOffset1);
             const optionOffset2 = a * (b + 1);
             if (optionOffset2 !== answer && optionOffset2 > 0) list.add(optionOffset2);
 
-            // Distractor 3: Combinación alternativa de factores seleccionados
             while (list.size < 4) {
                 const randomA = selectedTables[Math.floor(Math.random() * selectedTables.length)];
                 const randomB = Math.floor(Math.random() * 10) + 1;
@@ -654,7 +680,6 @@
             const bar = document.getElementById('laser-timer');
             bar.style.width = pct + '%';
             
-            // Cambiar color a rojo peligro
             if (pct < 30) {
                 bar.style.backgroundImage = 'linear-gradient(to right, #ef4444, #f87171)';
             } else {
@@ -673,44 +698,34 @@
             const width = rect.width || 600;
             const height = rect.height || 400;
 
-            // Para 2.º curso, crearemos divertidos marcianos SVG
             for (let i = 0; i < count; i++) {
                 const ufoEl = document.createElement('div');
                 ufoEl.className = 'absolute w-12 h-9 ufo-transition pointer-events-none filter drop-shadow-[0_2px_5px_rgba(236,72,153,0.6)]';
                 
-                // SVG con carita de alien verde en OVNI fucsia
                 ufoEl.innerHTML = `
                     <svg viewBox="0 0 48 36" class="w-full h-full">
-                        <!-- Cúpula de cristal -->
                         <path d="M14 16C14 10 18 6 24 6C30 6 34 10 34 16H14Z" fill="#38BDF8" opacity="0.85"/>
-                        <!-- Marcianito verde interior -->
                         <circle cx="24" cy="13" r="4" fill="#4ADE80"/>
                         <circle cx="22.5" cy="12" r="0.75" fill="#000"/>
                         <circle cx="25.5" cy="12" r="0.75" fill="#000"/>
-                        <!-- Cuerpo Platillo principal -->
                         <ellipse cx="24" cy="21" rx="20" ry="7" fill="#EC4899" stroke="#F472B6" stroke-width="1.5"/>
-                        <!-- Luces del platillo volador -->
                         <circle cx="10" cy="21" r="1.5" fill="#FBBF24" />
                         <circle cx="17" cy="23" r="1.5" fill="#38BDF8" />
                         <circle cx="24" cy="24" r="1.5" fill="#4ADE80" />
                         <circle cx="31" cy="23" r="1.5" fill="#38BDF8" />
                         <circle cx="38" cy="21" r="1.5" fill="#FBBF24" />
-                        <!-- Patas/Antena inferiores -->
                         <path d="M18 27L14 32" stroke="#E879F9" stroke-width="2" stroke-linecap="round"/>
                         <path d="M30 27L34 32" stroke="#E879F9" stroke-width="2" stroke-linecap="round"/>
                     </svg>
                 `;
 
-                // Posición aleatoria dispersa pero respetando márgenes
                 const marginX = 40;
-                const marginY = 40;
                 const startX = marginX + Math.random() * (width - marginX * 2 - 48);
-                const startY = 45 + Math.random() * (height * 0.55 - 45); // Limitado a la mitad superior de la pantalla
+                const startY = 45 + Math.random() * (height * 0.55 - 45);
 
                 ufoEl.style.transform = `translate(${startX}px, ${startY}px)`;
                 layer.appendChild(ufoEl);
 
-                // Dirección aleatoria de deriva con velocidad variable
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 0.4 + Math.random() * 0.6;
 
@@ -724,7 +739,7 @@
             }
         }
 
-        // MOTOR FÍSICO PARA HACER QUE LOS OVNIS FLOTEN CHAÓTICAMENTE
+        // MOTOR FÍSICO
         function runUfoPhysics() {
             if (!gameActive) return;
 
@@ -737,12 +752,9 @@
             const ufoSizeH = 36;
 
             ufoList.forEach(ufo => {
-                // Aplicar movimiento según velocidad y multiplicador de dificultad
                 ufo.x += ufo.vx * speedMultiplier;
                 ufo.y += ufo.vy * speedMultiplier;
 
-                // Límites de colisión para que reboten suavemente
-                // En X
                 if (ufo.x < 15) {
                     ufo.vx *= -1;
                     ufo.x = 15;
@@ -751,7 +763,6 @@
                     ufo.x = width - ufoSizeW - 15;
                 }
 
-                // En Y (Mantener en la parte superior para no chocar con el jugador)
                 if (ufo.y < 45) {
                     ufo.vy *= -1;
                     ufo.y = 45;
@@ -760,7 +771,6 @@
                     ufo.y = height * 0.65;
                 }
 
-                // Aplicar posición sin CSS transition para evitar tirones durante la flotación
                 ufo.element.classList.remove('ufo-transition');
                 ufo.element.style.transform = `translate(${ufo.x}px, ${ufo.y}px)`;
             });
@@ -778,27 +788,17 @@
             handleAnswer(btn, isCorrect);
         }
 
-        // PROCESAMIENTO COMPLETO DE RESPUESTA (ALINEACIÓN DEL RECTÁNGULO DE MULTIPLICAR)
+        // PROCESAMIENTO COMPLETO DE RESPUESTA
         function handleAnswer(clickedBtn, isCorrect) {
-            // Detener físicas para poder alinearlos
             cancelAnimationFrame(physicsAnimationId);
 
-            // Deshabilitar todas las opciones
-            const optionBtns = document.querySelectorAll('.option-btn');
-            optionBtns.forEach(btn => {
-                btn.disabled = true;
-                // Colorear botones para feedback
-                const val = parseInt(btn.dataset.value);
-                if (val === currentQuestion.answer) {
-                    btn.className = "option-btn p-4 md:p-6 bg-emerald-600 border-2 border-emerald-400 rounded-2xl text-2xl md:text-3xl font-bold text-slate-100 shadow-[0_0_15px_rgba(16,185,129,0.6)] transition-all";
-                } else if (clickedBtn && val === parseInt(clickedBtn.dataset.value)) {
-                    btn.className = "option-btn p-4 md:p-6 bg-rose-600 border-2 border-rose-400 rounded-2xl text-2xl md:text-3xl font-bold text-slate-100 shadow-[0_0_15px_rgba(239,68,68,0.6)] transition-all";
-                } else {
-                    btn.className = "option-btn p-4 md:p-6 bg-slate-950 border-2 border-slate-800 rounded-2xl text-2xl md:text-3xl font-bold text-slate-600 opacity-40 transition-all";
-                }
-            });
+            // Intercambiar paneles inferiores: Ocultar botones de opciones, mostrar tarjeta educativa
+            document.getElementById('options-panel').classList.add('hidden');
+            document.getElementById('options-panel').classList.remove('grid');
+            document.getElementById('educational-card').classList.remove('hidden');
+            document.getElementById('educational-card').classList.add('flex');
 
-            // Guardar en el historial para reporte de fin de partida (Guardando 'b' por separado para la tabla de resultados)
+            // Guardar en el historial
             historyQuestions.push({
                 table: currentQuestion.a,
                 b: currentQuestion.b,
@@ -807,79 +807,63 @@
                 answeredCorrectly: isCorrect
             });
 
-            // Disparar Láser de la nave espacial (Efecto visual estético)
             shootLaserBeam(isCorrect);
-
-            // ALINEAR OVNIS EN FORMACIÓN RECTANGULAR DE A x B
             alignUfosToGrid(currentQuestion.a, currentQuestion.b);
 
             let pointsAdded = 0;
 
-            // Evaluar lógica de vidas o puntos
             if (isCorrect) {
                 AudioSynth.playCorrect();
                 
-                // CALCULAR PUNTOS BASADOS EN EL TIEMPO RESTANTE
-                // Fórmula: Puntos Base (a * b * 10) con factor de tiempo entre x0.5 (último segundo) y x1.0 (máxima velocidad)
+                // Puntos proporcionales al tiempo restante
                 const basePoints = currentQuestion.a * currentQuestion.b * 10;
-                const timeRatio = Math.max(0, timer / maxTimer); // Ratio de tiempo restante (de 0 a 1)
-                const speedBonusFactor = 0.5 + (timeRatio * 0.5); // Rango final: 0.5 a 1.0
+                const timeRatio = Math.max(0, timer / maxTimer);
+                const speedBonusFactor = 0.5 + (timeRatio * 0.5); 
                 
                 pointsAdded = Math.round(basePoints * speedBonusFactor);
                 score += pointsAdded;
-                
-                speedMultiplier += 0.15; // Los marcianos flotan más rápido con cada acierto
+                speedMultiplier += 0.15;
                 
                 showEducationalFeedback(true, pointsAdded);
             } else {
                 AudioSynth.playExplosion();
                 lives--;
-                
                 showEducationalFeedback(false, 0);
             }
 
             updateHUD();
 
-            // Verificar si el juego terminó
-            if (lives <= 0) {
-                // Deshabilitar el botón de siguiente para forzar el fin de juego tras ver el modelo pedagógico
+            // Verificar si finaliza el juego (Por agotamiento de vidas o por llegar a la duración seleccionada)
+            if (lives <= 0 || wave >= totalRounds) {
                 const nextBtn = document.getElementById('btn-next-wave');
                 nextBtn.innerText = "Ver Resultados Finales ➔";
                 nextBtn.onclick = () => finishGame();
-                nextBtn.className = "px-5 py-2 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition text-sm shrink-0";
+                nextBtn.className = "px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold rounded-xl transition text-sm shrink-0";
             }
         }
 
-        // ANIMAR UN BEAM/LÁSER DESDE LA NAVE A LOS MARCIANOS
+        // LÁSER DEFENSIVO
         function shootLaserBeam(isCorrect) {
             AudioSynth.playLaser();
-            
             const arena = document.getElementById('space-arena');
             const beam = document.createElement('div');
             
-            // Posicionar el rayo láser saliendo de la nave
             beam.className = `absolute bottom-16 left-1/2 transform -translate-x-1/2 w-1.5 h-0 rounded-full z-15 ${
                 isCorrect 
                 ? 'bg-gradient-to-t from-cyan-400 to-emerald-400 shadow-[0_0_12px_#34d399]' 
                 : 'bg-gradient-to-t from-pink-500 to-red-500 shadow-[0_0_12px_#f43f5e]'
             }`;
             beam.style.transition = 'all 0.4s ease-out';
-            
             arena.appendChild(beam);
             
-            // Animar subida rápida
-            setTimeout(() => {
-                beam.style.height = '75%';
-            }, 10);
-            
-            // Desvanecer
+            setTimeout(() => { beam.style.height = '75%'; }, 10);
             setTimeout(() => {
                 beam.style.opacity = '0';
                 setTimeout(() => beam.remove(), 200);
             }, 400);
         }
 
-        // ALINEACIÓN GEOMÉTRICA CON ANIMACIÓN EN RECTÁNGULO DE A X B
+        // ALINEACIÓN GEOMÉTRICA CON ANIMACIÓN EN RECTÁNGULO DE A X B (ESPACIO AMPLIO Y SIN OBSTÁCULOS)
         function alignUfosToGrid(cols, rows) {
             const arena = document.getElementById('space-arena');
             const rect = arena.getBoundingClientRect();
@@ -889,42 +873,40 @@
             const ufoSizeW = 48;
             const ufoSizeH = 36;
 
-            // Determinar espaciados de cuadrícula dinámicamente según tamaño del contenedor
-            const spacingX = Math.min(55, (width - 120) / cols);
-            const spacingY = Math.min(45, (height * 0.5) / rows);
+            // Selección inteligente del margen según dimensiones de dispositivo móvil o de escritorio
+            const marginX = width < 640 ? 20 : 60;
+
+            // Distribuir de forma segura en la totalidad de la arena despejada
+            const spacingX = Math.min(50, (width - (marginX * 2)) / Math.max(1, cols - 1 || 1));
+            const spacingY = Math.min(38, (height - 150) / Math.max(1, rows - 1 || 1));
 
             const gridWidth = (cols - 1) * spacingX;
             const gridHeight = (rows - 1) * spacingY;
 
-            // Centrar el rectángulo geométrico en la parte media superior de la arena
+            // Centrar la cuadrícula verticalmente en todo el canvas disponible
             const startX = (width - gridWidth) / 2;
-            const startY = 65 + ((height * 0.5) - gridHeight) / 2;
+            const startY = 85 + ((height - 150 - gridHeight) / 2);
 
             ufoList.forEach((ufo, index) => {
-                // Calcular posición de celda (Fila y Columna)
                 const c = index % cols;
                 const r = Math.floor(index / cols);
 
                 const targetX = startX + c * spacingX - ufoSizeW / 2;
                 const targetY = startY + r * spacingY - ufoSizeH / 2;
 
-                // Forzar animación fluida mediante clase de transición CSS
                 ufo.element.classList.add('ufo-transition');
                 ufo.element.style.transform = `translate(${targetX}px, ${targetY}px)`;
             });
 
-            // Mostrar guía del rectángulo visual pedagógico que rodea la cuadrícula
+            // Mostrar el área enmarcada y las etiquetas pedagógicas del modelo de área
             const helper = document.getElementById('grid-visual-helper');
             helper.classList.remove('hidden');
-            
-            // Ajustar posición de la guía de la caja
             const padding = 12;
             helper.style.left = (startX - ufoSizeW/2 - padding) + 'px';
             helper.style.top = (startY - ufoSizeH/2 - padding) + 'px';
             helper.style.width = (gridWidth + ufoSizeW + padding * 2) + 'px';
             helper.style.height = (gridHeight + ufoSizeH + padding * 2) + 'px';
 
-            // Etiquetas explicativas pedagógicas
             document.getElementById('helper-cols-label').innerText = `${cols} columnas (grupos)`;
             document.getElementById('helper-rows-label').innerText = `${rows} por fila`;
         }
@@ -937,49 +919,45 @@
             const desc = document.getElementById('edu-desc');
             const nextBtn = document.getElementById('btn-next-wave');
 
-            // Asegurarse de que el botón dice siguiente ola si hay vidas
-            if (lives > 0) {
+            if (lives > 0 && wave < totalRounds) {
                 nextBtn.innerText = "Siguiente Ola 🛸 ➔";
                 nextBtn.onclick = () => advanceToNextWave();
-                nextBtn.className = "px-5 py-2 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-bold rounded-xl transition text-sm flex items-center gap-2 shrink-0";
+                nextBtn.className = "px-6 py-3 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-bold rounded-xl transition text-sm flex items-center gap-2 shrink-0 shadow-lg";
             }
-
-            card.classList.remove('hidden');
 
             const a = currentQuestion.a;
             const b = currentQuestion.b;
             const ans = currentQuestion.answer;
 
             if (isCorrect) {
-                card.className = "absolute inset-x-4 bottom-4 bg-slate-900/95 border-2 border-emerald-400 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl";
+                card.className = "bg-slate-900 border-2 border-emerald-400 rounded-3xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl animate-pulse";
                 emoji.innerText = "🎉";
                 title.innerText = `¡CÁLCULO CORRECTO! (+${pointsAdded} pts)`;
-                title.className = "text-emerald-400 font-bold text-sm md:text-base neon-text-green";
+                title.className = "text-emerald-400 font-bold text-base md:text-lg neon-text-green";
                 
-                // Mostrar un feedback divertido sobre qué tan rápido lo resolvió el niño
                 let speedComment = "¡Qué gran agilidad!";
                 const pctTimeLeft = timer / maxTimer;
                 if (pctTimeLeft > 0.8) speedComment = "¡Rápido como un rayo láser! ⚡";
                 else if (pctTimeLeft > 0.4) speedComment = "¡Excelente precisión táctica! 🎯";
 
-                desc.innerHTML = `Descubriste la clave: <strong>${a} × ${b} = ${ans}</strong> marcianos flotantes. ${speedComment}<br>¡Míralos en su formación de <strong>${a} columnas por ${b} filas</strong>!`;
+                desc.innerHTML = `Descubriste la clave: <strong>${a} × ${b} = ${ans}</strong> marcianos flotantes. ${speedComment}<br>¡Míralos en su formación ordenada de <strong>${a} columnas por ${b} filas</strong> en la pantalla de arriba!`;
             } else {
-                card.className = "absolute inset-x-4 bottom-4 bg-slate-900/95 border-2 border-rose-500 rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 z-20 shadow-2xl";
+                card.className = "bg-slate-900 border-2 border-rose-500 rounded-3xl p-4 md:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl";
                 emoji.innerText = "📡";
                 title.innerText = "SISTEMAS SOBRECARGADOS (0 pts)";
-                title.className = "text-rose-400 font-bold text-sm md:text-base neon-text-red";
-                desc.innerHTML = `¡Oh, no! La invasión penetró el escudo. El resultado correcto de <strong>${a} × ${b} es ${ans}</strong>.<br>Observa cómo se agrupan ordenadamente en columnas y filas para entender el cálculo.`;
+                title.className = "text-rose-400 font-bold text-base md:text-lg neon-text-red";
+                desc.innerHTML = `¡Oh, no! La invasión penetró el escudo. El resultado correcto de <strong>${a} × ${b} es ${ans}</strong>.<br>Observa cómo se agrupan ordenadamente en columnas y filas en la arena espacial para facilitar el cálculo.`;
             }
         }
 
-        // CONTINUAR EL FLUJO HACIA LA SIGUIENTE PREGUNTA
+        // AVANZAR DE RONDA
         function advanceToNextWave() {
             wave++;
             updateHUD();
             startNewWave();
         }
 
-        // PANTALLA DE RESULTADO FINAL
+        // PANTALLA DE RESULTADOS FINALES
         function finishGame() {
             gameActive = false;
             clearInterval(timerInterval);
@@ -991,13 +969,12 @@
             document.getElementById('screen-game').classList.add('hidden');
             document.getElementById('screen-summary').classList.remove('hidden');
 
-            // Títulos finales dinámicos según el rendimiento
             const title = document.getElementById('summary-title');
             const subtitle = document.getElementById('summary-subtitle');
-            if (score > 1200) {
+            if (score > (totalRounds * 50)) {
                 title.innerText = "¡HÉROE MATEMÁTICO!";
                 subtitle.innerText = "Has salvado el planeta con una defensa impecable";
-            } else if (score > 500) {
+            } else if (lives > 0) {
                 title.innerText = "Misión Superada";
                 subtitle.innerText = "Excelente pilotaje, el escudo matemático resistió";
             } else {
@@ -1006,13 +983,12 @@
             }
 
             document.getElementById('summary-score').innerText = score;
-            document.getElementById('summary-waves').innerText = wave - 1;
+            document.getElementById('summary-waves').innerText = `${historyQuestions.length} de ${totalRounds}`;
 
-            // Generar reporte de rendimiento educativo estructurado por tablas
             buildPerformanceReport();
         }
 
-        // CONSTRUCCIÓN DEL REPORTE DETALLADO POR TABLAS PARA PROFESORES/PADRES
+        // CONSTRUCCIÓN DEL REPORTE DETALLADO POR TABLAS (1 al 10)
         function buildPerformanceReport() {
             const container = document.getElementById('feedback-tables-container');
             container.innerHTML = '';
@@ -1022,7 +998,6 @@
                 return;
             }
 
-            // Ordenar tablas seleccionadas numéricamente para mejor presentación
             const sortedTables = [...selectedTables].sort((a, b) => a - b);
 
             sortedTables.forEach(tableNum => {
@@ -1037,18 +1012,16 @@
                     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 `;
 
-                // Generar los 10 renglones de la tabla de multiplicar
                 for (let i = 1; i <= 10; i++) {
                     const formulaText = `${tableNum} × ${i} = ${tableNum * i}`;
                     
-                    // Buscar en el historial de preguntas de la sesión
+                    // Buscar en el historial de preguntas
                     const attempts = historyQuestions.filter(q => q.table === tableNum && q.b === i);
                     
                     let cellClass = "";
                     let icon = "";
 
                     if (attempts.length > 0) {
-                        // Si hay fallos en los intentos de esta multiplicación en concreto se destaca como "A repasar"
                         const hasFailed = attempts.some(att => !att.answeredCorrectly);
                         if (hasFailed) {
                             cellClass = "bg-rose-950/40 border border-rose-500/50 text-rose-300 shadow-[0_0_8px_rgba(239,68,68,0.15)]";
@@ -1058,7 +1031,7 @@
                             icon = "✅ ";
                         }
                     } else {
-                        // Operaciones no preguntadas durante la sesión
+                        // Operación no evaluada durante la sesión
                         cellClass = "bg-slate-950/40 border border-slate-800/80 text-slate-500/80 italic font-normal";
                         icon = "⚫ ";
                     }
@@ -1070,10 +1043,7 @@
                     `;
                 }
 
-                htmlContent += `
-                    </div>
-                `;
-
+                htmlContent += `</div>`;
                 tableCard.innerHTML = htmlContent;
                 container.appendChild(tableCard);
             });
