@@ -71,6 +71,44 @@
     <!-- ÁREA DE CONTENIDO PRINCIPAL -->
     <main class="flex-grow flex items-center justify-center p-4 relative z-10">
         
+        <!-- PANTALLA INTRO: HISTORIA NARRATIVA (NUEVA) -->
+        <section id="screen-intro" class="w-full max-w-2xl hidden bg-slate-950/95 border-2 border-pink-500 rounded-3xl p-6 md:p-8 neon-border-magenta backdrop-blur-md">
+            <div class="text-center">
+                <!-- Indicador de pasos estelares -->
+                <div class="flex justify-center gap-2 mb-6" id="intro-indicators">
+                    <span class="w-12 h-1.5 rounded-full bg-pink-500"></span>
+                    <span class="w-12 h-1.5 rounded-full bg-slate-850"></span>
+                    <span class="w-12 h-1.5 rounded-full bg-slate-850"></span>
+                    <span class="w-12 h-1.5 rounded-full bg-slate-850"></span>
+                </div>
+
+                <!-- Ilustración animada con emojis y efectos de pulsación -->
+                <div class="relative w-full h-44 bg-slate-900/60 rounded-2xl flex items-center justify-center text-6xl md:text-7xl mb-6 border border-pink-500/20 overflow-hidden shadow-inner">
+                    <div id="intro-graphics-bg" class="absolute inset-0 bg-radial-gradient from-pink-500/10 to-transparent animate-pulse"></div>
+                    <div id="intro-graphics-main" class="relative z-10 animate-bounce transition-all duration-500">
+                        🛸🛸🌍
+                    </div>
+                </div>
+
+                <!-- Contenedor del texto de la historia -->
+                <div class="min-h-[110px] md:min-h-[130px] flex items-center justify-center px-2 mb-6">
+                    <p id="intro-text" class="text-slate-200 text-base md:text-lg leading-relaxed font-medium">
+                        Cargando transmisiones de la Tierra...
+                    </p>
+                </div>
+
+                <!-- Navegación de la introducción -->
+                <div class="flex items-center justify-between gap-4 pt-4 border-t border-slate-900">
+                    <button onclick="skipIntro()" class="px-5 py-2.5 text-slate-400 hover:text-pink-400 text-sm font-semibold transition">
+                        Saltar intro ⏭️
+                    </button>
+                    <button onclick="nextIntroSlide()" id="btn-next-intro" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:brightness-110 active:scale-95 text-slate-100 font-bold rounded-xl transition text-sm flex items-center gap-2 shadow-lg">
+                        Siguiente transmisión ➔
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- PANTALLA 1: CONFIGURACIÓN -->
         <section id="screen-setup" class="w-full max-w-2xl bg-slate-900/90 border-2 border-cyan-500 rounded-3xl p-6 md:p-8 neon-border-cyan backdrop-blur-md">
             <h2 class="text-2xl md:text-3xl font-bold text-center text-cyan-300 mb-2">¡Prepara tu Defensa Matemática!</h2>
@@ -121,14 +159,19 @@
                 </div>
             </div>
 
-            <!-- Botón de inicio -->
-            <div class="text-center">
-                <button id="btn-start" onclick="startGame()" class="relative group px-8 py-4 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-2xl font-bold text-lg md:text-xl shadow-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none w-full md:w-auto">
+            <!-- Botones de inicio y ver intro -->
+            <div class="flex flex-col md:flex-row gap-3 justify-center items-center">
+                <button id="btn-start" onclick="startGame()" class="relative group px-8 py-4 bg-gradient-to-r from-cyan-500 to-pink-500 rounded-2xl font-bold text-base md:text-lg shadow-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:pointer-events-none w-full md:w-auto">
                     <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-pink-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-60 transition duration-300"></span>
                     <span class="relative">🛸 ¡INICIAR DEFENSA!</span>
                 </button>
-                <p id="setup-error" class="text-rose-400 text-xs mt-2 hidden">Debes seleccionar al menos una tabla para jugar.</p>
+                
+                <!-- Botón de Ver Intro Narrativa -->
+                <button onclick="showIntro(true)" class="px-6 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-2xl font-bold text-slate-300 transition-all transform hover:scale-105 active:scale-95 text-sm md:text-base w-full md:w-auto">
+                    🎬 Ver Intro (Historia)
+                </button>
             </div>
+            <p id="setup-error" class="text-rose-400 text-xs mt-2 text-center hidden">Debes seleccionar al menos una tabla para jugar.</p>
         </section>
 
         <!-- PANTALLA 2: JUEGO ACTIVO -->
@@ -166,7 +209,7 @@
                 </div>
             </div>
 
-            <!-- Arena de combate espacial (COMPLETAMENTE LIMPIA DE MENSAJES FLOTANTES INFERIORES) -->
+            <!-- Arena de combate espacial -->
             <div class="relative w-full h-[380px] md:h-[480px] bg-slate-950 border-2 border-slate-800 rounded-3xl overflow-hidden neon-border-magenta" id="space-arena">
                 <!-- Las estrellas o asteroides decorativos se mueven de fondo -->
                 <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-950/90 pointer-events-none"></div>
@@ -210,7 +253,7 @@
                 </div>
             </div>
 
-            <!-- TIENDA DE AYUDAS ESTELARES (NUEVO) -->
+            <!-- TIENDA DE AYUDAS ESTELARES -->
             <div class="bg-slate-900/90 border border-cyan-500/30 p-3 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 backdrop-blur-sm shadow-[0_0_15px_rgba(6,182,212,0.15)]">
                 <div class="flex items-center gap-2">
                     <span class="text-xl">🏪</span>
@@ -243,10 +286,10 @@
                 </div>
             </div>
 
-            <!-- CONTENEDOR DINÁMICO DE INTERACCIÓN (Sustituye botones por el feedback al contestar) -->
+            <!-- CONTENEDOR DINÁMICO DE INTERACCIÓN -->
             <div class="relative min-h-[140px] md:min-h-[160px] w-full">
                 
-                <!-- Panel de opciones / Respuestas (Visible durante el juego activo) -->
+                <!-- Panel de opciones / Respuestas -->
                 <div id="options-panel" class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <button onclick="submitAnswer(this)" class="option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md">
                         ?
@@ -262,7 +305,7 @@
                     </button>
                 </div>
 
-                <!-- Cartel de Respuesta de Explicación Educativa (Sustituye a los botones al responder) -->
+                <!-- Cartel de Respuesta de Explicación Educativa -->
                 <div id="educational-card" class="hidden bg-slate-900/95 border-2 border-emerald-400 rounded-2xl p-4 md:p-5 flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
                     <div class="flex items-center gap-3 text-left">
                         <span id="edu-emoji" class="text-3xl md:text-4xl shrink-0">🎉</span>
@@ -332,7 +375,9 @@
 
     <!-- PIE DE PÁGINA -->
     <footer class="p-4 bg-slate-950/40 text-center text-xs text-slate-500 z-10 border-t border-slate-950">
-<p>3xM: Multiplicaciones Matemáticas Marcianas © 2026 | Diseño: Eva & Álvaro Sañudo | Esta aplicación ha sido realizada con ayuda de herramientas de IA automatizadas.</p>    </footer>
+        <p>3xM: Multiplicaciones Matemáticas Marcianas © 2026 - Herramienta pedagógica para 2.º de Primaria.</p>
+    </footer>
+
     <!-- LOGICA DEL JUEGO -->
     <script>
         // CONFIGURACIÓN DE AUDIO CON WEB AUDIO API
@@ -368,7 +413,6 @@
                 if (this.muted) return;
                 this.init();
                 const now = this.ctx.currentTime;
-                // Nota corta Do, Mi, Sol, Do agudo
                 const notes = [261.63, 329.63, 392.00, 523.25];
                 notes.forEach((freq, idx) => {
                     const osc = this.ctx.createOscillator();
@@ -420,7 +464,7 @@
                 if (this.muted) return;
                 this.init();
                 const now = this.ctx.currentTime;
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // Arpegio alegre ascendente
+                const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
@@ -473,19 +517,125 @@
         let gameActive = false;
 
         // Estado de ayudas estelares
-        let slowTimeRounds = 0;      // Rondas restantes con tiempo lento
-        let isHalfActive = false;    // Indica si el 50/50 está activo esta ronda
-        let isRectForced = false;    // Indica si la formación rectangular ya fue forzada esta ronda
-        let canBuy = true;           // Previene compras una vez se ha respondido o terminado el juego
+        let slowTimeRounds = 0;      
+        let isHalfActive = false;    
+        let isRectForced = false;    
+        let canBuy = true;           
 
         // Historial para el reporte final de la partida
-        let historyQuestions = []; // Array de { table, b, formula, answerCorrect, answeredCorrectly }
+        let historyQuestions = []; 
 
-        // Inicializar el selector de tablas al cargar
+        // ESTADO DE LA INTRODUCCIÓN NARRATIVA
+        let currentIntroSlide = 0;
+        const introSlides = [
+            {
+                text: "🌌 ¡ALERTA ROJA EN LA TIERRA! Una enorme y traviesa flota de OVNIs marcianos se dirige a nuestro planeta para desordenar todos los juguetes y ciudades...",
+                graphics: "🛸🛸🌍"
+            },
+            {
+                text: "📡 Para defendernos, la Alianza Estelar ha activado el poderoso 'Cañón Quantum de Defensa Estelar'. Es nuestra última esperanza...",
+                graphics: "🛰️⚡☄️"
+            },
+            {
+                text: "💥 Pero tiene un gran secreto: el cañón necesita que ajustemos su potencia EXACTA para destruir a los OVNIs marcianos. ¡Si fallamos el cálculo, los marcianos esquivarán el disparo!",
+                graphics: "🚀⚡💥"
+            },
+            {
+                text: "🧠 Los invasores no vuelan agrupados en perfectas filas y columnas. Es imposible contarlos uno a uno... ¡Por eso usaremos el arma tecnológica más veloz del universo: LAS TABLAS DE MULTIPLICAR!",
+                graphics: "📐🧠✖️"
+            }
+        ];
+
+        // Inicializar el selector de tablas e intro al cargar
         window.addEventListener('load', () => {
             renderTablesSelector();
-            goToSetup();
+            
+            // Comprobación segura de primer acceso para mostrar intro automáticamente
+            let hasSeenIntro = false;
+            try {
+                hasSeenIntro = localStorage.getItem('3xm_intro_played_v1') === 'true';
+            } catch (e) {
+                hasSeenIntro = false; // Fallback ante restricciones de cookies en iframe
+            }
+
+            if (!hasSeenIntro) {
+                showIntro(false);
+            } else {
+                goToSetup();
+            }
         });
+
+        // MANEJO DE LA INTRODUCCIÓN NARRATIVA
+        function showIntro(isManual) {
+            document.getElementById('screen-setup').classList.add('hidden');
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-summary').classList.add('hidden');
+            document.getElementById('screen-intro').classList.remove('hidden');
+            
+            currentIntroSlide = 0;
+            updateIntroSlide();
+            
+            // Activar contexto de audio ante interacción del primer clic
+            AudioSynth.init();
+        }
+
+        function updateIntroSlide() {
+            const slide = introSlides[currentIntroSlide];
+            
+            // Aplicar textos e ilustraciones
+            document.getElementById('intro-text').innerText = slide.text;
+            
+            const graphicsEl = document.getElementById('intro-graphics-main');
+            graphicsEl.innerText = slide.graphics;
+            
+            // Animar el cambio estético de forma sutil
+            graphicsEl.classList.remove('animate-bounce');
+            void graphicsEl.offsetWidth; // Trigger reflow
+            graphicsEl.classList.add('animate-bounce');
+
+            // Actualizar indicadores (bolitas)
+            const indicatorsContainer = document.getElementById('intro-indicators');
+            indicatorsContainer.innerHTML = '';
+            for (let i = 0; i < introSlides.length; i++) {
+                const isActive = i === currentIntroSlide;
+                indicatorsContainer.innerHTML += `
+                    <span class="w-12 h-1.5 rounded-full transition-all duration-300 ${
+                        isActive ? 'bg-pink-500 shadow-[0_0_8px_#ec4899]' : 'bg-slate-800'
+                    }"></span>
+                `;
+            }
+
+            // Cambiar etiqueta del botón en la última diapositiva
+            const nextBtn = document.getElementById('btn-next-intro');
+            if (currentIntroSlide === introSlides.length - 1) {
+                nextBtn.innerText = "🚀 ¡A LAS ARMAS!";
+            } else {
+                nextBtn.innerText = "Siguiente transmisión ➔";
+            }
+        }
+
+        function nextIntroSlide() {
+            AudioSynth.playLaser();
+            if (currentIntroSlide < introSlides.length - 1) {
+                currentIntroSlide++;
+                updateIntroSlide();
+            } else {
+                skipIntro(); // Finalizar historia
+            }
+        }
+
+        function skipIntro() {
+            AudioSynth.playCorrect();
+            
+            // Guardar confirmación en localStorage de manera segura
+            try {
+                localStorage.setItem('3xm_intro_played_v1', 'true');
+            } catch (e) {
+                // Silenciar errores de iFrame
+            }
+            
+            goToSetup();
+        }
 
         // SELECCIÓN DE DURACIÓN
         function selectDuration(num) {
@@ -572,6 +722,7 @@
 
         // CONTROL DE PANTALLAS
         function goToSetup() {
+            document.getElementById('screen-intro').classList.add('hidden');
             document.getElementById('screen-setup').classList.remove('hidden');
             document.getElementById('screen-game').classList.add('hidden');
             document.getElementById('screen-summary').classList.add('hidden');
@@ -597,6 +748,7 @@
         function startGame() {
             AudioSynth.init();
             AudioSynth.playCorrect();
+            document.getElementById('screen-intro').classList.add('hidden');
             document.getElementById('screen-setup').classList.add('hidden');
             document.getElementById('screen-game').classList.remove('hidden');
             document.getElementById('screen-summary').classList.add('hidden');
@@ -625,7 +777,6 @@
             document.getElementById('hud-speed').innerText = `x${speedMultiplier.toFixed(1)}`;
             document.getElementById('hud-wave').innerText = `${wave} / ${totalRounds}`;
             
-            // Indicador de tiempo lento
             const slowIndicator = document.getElementById('hud-slow-time-indicator');
             if (slowTimeRounds > 0) {
                 slowIndicator.classList.remove('hidden');
@@ -634,7 +785,6 @@
                 slowIndicator.classList.add('hidden');
             }
 
-            // Dibujar corazones de vida (soporta hasta 5 gracias a la tienda)
             const hearts = document.getElementById('lives-container');
             hearts.innerHTML = '';
             for (let i = 1; i <= Math.max(3, lives); i++) {
@@ -648,7 +798,6 @@
             updateShopButtons();
         }
 
-        // ACTUALIZACIÓN DE ESTADO DE LOS BOTONES DE LA TIENDA
         function updateShopButtons() {
             const btnLife = document.getElementById('shop-btn-life');
             const btnSlow = document.getElementById('shop-btn-slow');
@@ -660,20 +809,15 @@
                 return;
             }
 
-            // Vida: requiere al menos 200 puntos y tener menos del límite de 5 vidas
             btnLife.disabled = (score < 200 || lives >= 5);
-
-            // Tiempo Lento: requiere al menos 100 puntos
             btnSlow.disabled = (score < 100);
 
-            // 50/50: requiere al menos 80 puntos y no haber sido usado en esta ronda
             if (isHalfActive) {
                 btnHalf.disabled = true;
             } else {
                 btnHalf.disabled = (score < 80);
             }
 
-            // Formación rápida: requiere al menos 120 puntos y no estar ya alineado
             if (isRectForced) {
                 btnRect.disabled = true;
             } else {
@@ -681,7 +825,6 @@
             }
         }
 
-        // FUNCIONES DE COMPRA EN TIENDA
         function buyExtraLife() {
             if (!canBuy || score < 200 || lives >= 5) {
                 AudioSynth.playError();
@@ -699,7 +842,7 @@
                 return;
             }
             score -= 100;
-            slowTimeRounds += 2; // Añade 2 rondas de ralentización
+            slowTimeRounds += 2;
             AudioSynth.playShopBuy();
             updateHUD();
         }
@@ -717,7 +860,6 @@
             const buttons = Array.from(document.querySelectorAll('.option-btn'));
             const incorrectButtons = buttons.filter(btn => parseInt(btn.dataset.value) !== correctAnswer);
             
-            // Elegir 2 distractores aleatorios para ocultar
             shuffleArray(incorrectButtons);
             incorrectButtons.slice(0, 2).forEach(btn => {
                 btn.disabled = true;
@@ -737,46 +879,39 @@
             isRectForced = true;
             AudioSynth.playShopBuy();
 
-            // Detener físicas y ordenar en grilla inmediatamente
             cancelAnimationFrame(physicsAnimationId);
             alignUfosToGrid(currentQuestion.a, currentQuestion.b);
 
             updateHUD();
         }
 
-        // GENERAR UNA PREGUNTA Y OLA (CON PROGRESIÓN DE DIFICULTAD Y SIN REPETICIÓN)
         function startNewWave() {
-            // Intercambiar zona de interacción: Mostrar los botones y ocultar la tarjeta pedagógica
             document.getElementById('options-panel').classList.remove('hidden');
             document.getElementById('options-panel').classList.add('grid');
             document.getElementById('educational-card').classList.add('hidden');
             document.getElementById('educational-card').classList.remove('flex');
             document.getElementById('grid-visual-helper').classList.add('hidden');
             
-            // Habilitar la tienda para compras tácticas en esta ronda
             canBuy = true;
             isHalfActive = false;
             isRectForced = false;
 
-            // Habilitar de nuevo los botones de opciones
             const optionBtns = document.querySelectorAll('.option-btn');
             optionBtns.forEach(btn => {
                 btn.disabled = false;
                 btn.className = "option-btn p-4 md:p-6 bg-slate-900 border-2 border-slate-700 rounded-2xl text-2xl md:text-3xl font-bold text-slate-200 hover:border-cyan-400 hover:bg-slate-800/80 active:scale-95 transition-all duration-150 shadow-md";
             });
 
-            // ANDAMIAJE COGNITIVO / CURVA DE DIFICULTAD DINÁMICA:
             const progressRatio = wave / totalRounds;
             let maxFactorB = 10;
             if (progressRatio <= 0.25) {
-                maxFactorB = 3; // Primer cuarto del juego: multiplicaciones muy sencillas (A x 1..3)
+                maxFactorB = 3; 
             } else if (progressRatio <= 0.5) {
-                maxFactorB = 5; // Segundo cuarto: dificultad progresiva (A x 1..5)
+                maxFactorB = 5; 
             } else if (progressRatio <= 0.75) {
-                maxFactorB = 8; // Tercer cuarto: nivel medio-alto (A x 1..8)
+                maxFactorB = 8; 
             }
 
-            // Crear lista de todas las combinaciones posibles en base a las tablas seleccionadas y el límite progresivo de B
             let eligiblePairs = [];
             selectedTables.forEach(tableA => {
                 for (let factorB = 1; factorB <= maxFactorB; factorB++) {
@@ -784,7 +919,6 @@
                 }
             });
 
-            // Filtrar las parejas que NO hayan sido preguntadas en esta partida
             let unaskedPairs = eligiblePairs.filter(pair => {
                 return !historyQuestions.some(hist => hist.table === pair.a && hist.b === pair.b);
             });
@@ -802,10 +936,8 @@
 
             currentQuestion = { a, b, answer };
 
-            // Dibujar pregunta
             document.getElementById('question-text').innerText = `${a} × ${b}`;
 
-            // Generar opciones
             const options = generateDistractors(a, b, answer);
             shuffleArray(options);
 
@@ -814,34 +946,28 @@
                 optionBtns[i].dataset.value = options[i];
             }
 
-            // Crear y dbiujar los OVNIs dispersos
             createUfos(answer);
 
-            // CALCULAR TIEMPO MÁXIMO CON BONUS ADAPTATIVO POR DIFICULTAD DE LA OPERACIÓN
             const baseWaveLimit = Math.max(6, baseTimeLimit - (wave - 1) * 1.2); 
-            const difficultyBonus = (a * b) * 0.15; // Añade hasta 15 segundos para operaciones complejas
+            const difficultyBonus = (a * b) * 0.15; 
             
             maxTimer = baseWaveLimit + difficultyBonus;
             timer = maxTimer;
             updateTimerBar();
 
-            // Actualizar botones de tienda
             updateShopButtons();
 
-            // Arrancar temporizador
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
-                // Si la ayuda de "Tiempo Lento" está activa, el tiempo se reduce a la mitad de velocidad (0.05 en lugar de 0.1)
                 const timeStep = slowTimeRounds > 0 ? 0.05 : 0.1;
                 timer -= timeStep;
                 updateTimerBar();
                 if (timer <= 0) {
                     clearInterval(timerInterval);
-                    handleAnswer(null, false); // Fallo por tiempo
+                    handleAnswer(null, false); 
                 }
             }, 100);
 
-            // Arrancar físicas flotantes de los OVNIs
             cancelAnimationFrame(physicsAnimationId);
             runUfoPhysics();
         }
@@ -884,14 +1010,12 @@
             if (pct < 30) {
                 bar.style.backgroundImage = 'linear-gradient(to right, #ef4444, #f87171)';
             } else if (slowTimeRounds > 0) {
-                // Color azul/neón especial si la ralentización temporal está activa
                 bar.style.backgroundImage = 'linear-gradient(to right, #06b6d4, #38bdf8)';
             } else {
                 bar.style.backgroundImage = 'linear-gradient(to right, #ef4444, #f97316, #eab308)';
             }
         }
 
-        // CREAR LOS OVNIS DISPERSOS
         function createUfos(count) {
             const layer = document.getElementById('ufo-layer');
             layer.innerHTML = '';
@@ -943,7 +1067,6 @@
             }
         }
 
-        // MOTOR FÍSICO
         function runUfoPhysics() {
             if (!gameActive) return;
 
@@ -982,7 +1105,6 @@
             physicsAnimationId = requestAnimationFrame(runUfoPhysics);
         }
 
-        // RECIBIR RESPUESTA DE USUARIO
         function submitAnswer(btn) {
             if (btn.disabled) return;
             clearInterval(timerInterval);
@@ -992,20 +1114,16 @@
             handleAnswer(btn, isCorrect);
         }
 
-        // PROCESAMIENTO COMPLETO DE RESPUESTA
         function handleAnswer(clickedBtn, isCorrect) {
             cancelAnimationFrame(physicsAnimationId);
 
-            // Cerrar la tienda para compras esta ronda
             canBuy = false;
 
-            // Intercambiar paneles inferiores: Ocultar botones de opciones, mostrar tarjeta educativa
             document.getElementById('options-panel').classList.add('hidden');
             document.getElementById('options-panel').classList.remove('grid');
             document.getElementById('educational-card').classList.remove('hidden');
             document.getElementById('educational-card').classList.add('flex');
 
-            // Guardar en el historial
             historyQuestions.push({
                 table: currentQuestion.a,
                 b: currentQuestion.b,
@@ -1022,7 +1140,6 @@
             if (isCorrect) {
                 AudioSynth.playCorrect();
                 
-                // Puntos proporcionales al tiempo restante
                 const basePoints = currentQuestion.a * currentQuestion.b * 10;
                 const timeRatio = Math.max(0, timer / maxTimer);
                 const speedBonusFactor = 0.5 + (timeRatio * 0.5); 
@@ -1040,7 +1157,6 @@
 
             updateHUD();
 
-            // Verificar si finaliza el juego
             if (lives <= 0 || wave >= totalRounds) {
                 const nextBtn = document.getElementById('btn-next-wave');
                 nextBtn.innerText = "Ver Resultados Finales ➔";
@@ -1049,7 +1165,6 @@
             }
         }
 
-        // LÁSER DEFENSIVO
         function shootLaserBeam(isCorrect) {
             AudioSynth.playLaser();
             const arena = document.getElementById('space-arena');
@@ -1070,7 +1185,6 @@
             }, 400);
         }
 
-        // ALINEACIÓN GEOMÉTRICA CON ANIMACIÓN EN RECTÁNGULO DE A X B
         function alignUfosToGrid(cols, rows) {
             const arena = document.getElementById('space-arena');
             const rect = arena.getBoundingClientRect();
@@ -1102,7 +1216,6 @@
                 ufo.element.style.transform = `translate(${targetX}px, ${targetY}px)`;
             });
 
-            // Mostrar el área enmarcada y las etiquetas pedagógicas del modelo de área
             const helper = document.getElementById('grid-visual-helper');
             helper.classList.remove('hidden');
             const padding = 12;
@@ -1115,7 +1228,6 @@
             document.getElementById('helper-rows-label').innerText = `${rows} por fila`;
         }
 
-        // MOSTRAR EXPLICACIÓN PEDAGÓGICA ADAPTATIVA
         function showEducationalFeedback(isCorrect, pointsAdded) {
             const card = document.getElementById('educational-card');
             const emoji = document.getElementById('edu-emoji');
@@ -1154,17 +1266,15 @@
             }
         }
 
-        // AVANZAR DE RONDA
         function advanceToNextWave() {
             wave++;
             if (slowTimeRounds > 0) {
-                slowTimeRounds--; // Reducir la cuenta de rondas con tiempo lento activa
+                slowTimeRounds--; 
             }
             updateHUD();
             startNewWave();
         }
 
-        // PANTALLA DE RESULTADOS FINALES
         function finishGame() {
             gameActive = false;
             clearInterval(timerInterval);
@@ -1195,7 +1305,6 @@
             buildPerformanceReport();
         }
 
-        // CONSTRUCCIÓN DEL REPORTE DETALLADO POR TABLAS (1 al 10)
         function buildPerformanceReport() {
             const container = document.getElementById('feedback-tables-container');
             container.innerHTML = '';
@@ -1222,7 +1331,6 @@
                 for (let i = 1; i <= 10; i++) {
                     const formulaText = `${tableNum} × ${i} = ${tableNum * i}`;
                     
-                    // Buscar en el historial de preguntas
                     const attempts = historyQuestions.filter(q => q.table === tableNum && q.b === i);
                     
                     let cellClass = "";
@@ -1238,7 +1346,6 @@
                             icon = "✅ ";
                         }
                     } else {
-                        // Operación no evaluada durante la sesión
                         cellClass = "bg-slate-950/40 border border-slate-800/80 text-slate-500/80 italic font-normal";
                         icon = "⚫ ";
                     }
